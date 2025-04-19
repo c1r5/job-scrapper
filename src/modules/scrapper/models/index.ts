@@ -1,0 +1,1 @@
+export { SerpApiResponse } from './serpapi-response'
