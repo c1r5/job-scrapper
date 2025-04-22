@@ -1,0 +1,24 @@
+import { JobEntity } from "infra/database/entities/job.entity";
+import { LinkEntity } from "infra/database/entities/link.entity";
+import { ScrappingOptions } from "../scrapping-options";
+
+
+export interface EventPayloads {
+  'google.scrapping.request': ScrappingOptions,
+
+  'scrapping.started': any
+  'scrapping.error': any,
+  'scrapping.finished': any,
+
+  'link.create.request': string | string[];
+  'link.created': Partial<LinkEntity>;
+  'link.updated': Partial<LinkEntity>;
+  'link.deleted': { linkId: number };
+
+  'job.created': Partial<JobEntity>;
+  'job.updated': Partial<JobEntity>;
+  'job.deleted': { jobId: string };
+
+  'job.create.request': Partial<JobEntity>;
+  'job.create.error': any;
+}
