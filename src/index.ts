@@ -22,5 +22,5 @@ import { localEventBus } from "application/events";
   links.forEach(link => {
     localEventBus.publish('link.created', link)
   })
-  
+
 })();

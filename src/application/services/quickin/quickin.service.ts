@@ -6,9 +6,9 @@ import { Readable } from "stream";
 import { AxiosError } from "axios";
 import { IEventListener } from "models/interfaces/event-listener.interface";
 import { sleepms } from "application/helpers";
-import { quickinJobAdapter } from "models/adapters/quickin.job-adapter";
 import { extract_slugs } from "./helpers/extract_slug";
 import { get_company, get_jobs } from "application/services/http/quickin.api";
+import { JobDTO } from "models/dtos/job-dto";
 
 
 @injectable()
@@ -53,6 +53,10 @@ export class QuickinService implements IEventListener {
 
     while (total_pages === 0 || current_page < total_pages) {
       try {
+        if (retries > 5) {
+          console.error(`[!] Too many retries for slug ${slug}. Skipping...`);
+          break;
+        }
         const page = await get_jobs({
           id: accountInfo._id,
           page: current_page,
@@ -62,13 +66,20 @@ export class QuickinService implements IEventListener {
           break;
         }
 
-        const jobs = page.docs.map(job => quickinJobAdapter(Object.assign(accountInfo, job)));
-
-        const jobStreams = Readable.from(jobs);
-
-        for await (const job of jobStreams) {
-          this.eventbus.publish('job.create.request', job);
-        }
+        page.docs.forEach(job => {
+          this.eventbus.publish('job.create.request', ({
+            platformJobId: job._id,
+            role: job.title,
+            company: accountInfo.name,
+            description: job.description,
+            postedAt: new Date(job.created_at),
+            country: job.country,
+            city: job.city,
+            workplaceType: job.workplace_type,
+            url: `https://jobs.quickin.io/${accountInfo.slug}/jobs/${job._id}`,
+            companyLogoUrl: accountInfo.logo_media_url,
+          }));
+        });
 
         current_page++;
         total_pages = page.total;
@@ -76,7 +87,7 @@ export class QuickinService implements IEventListener {
       } catch (error) {
 
         if (error instanceof AxiosError) {
-          console.error(`[!] Error fetching page ${current_page} for slug ${slug}:`, error.message);
+          console.error(`[!] Error fetching page ${current_page} for slug ${slug}:`, error.response?.data || error.message);
           retries++;
         }
 

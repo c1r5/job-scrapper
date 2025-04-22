@@ -1,28 +1,41 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { LocationEntity } from "./location.entity";
-import { WorkType } from "models/types/work-types";
+import { WorkplaceType } from "models/types/work-types";
 
 @Entity('jobs')
 export class JobEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'text' })
   role!: string;
 
-  @Column({ type: 'varchar', length: 255 })
+  @Column({ type: 'text'})
   company!: string;
 
   @Column({ type: 'text' })
   description!: string;
 
-  @JoinColumn({ name: 'locationId' })
-  @ManyToOne(() => LocationEntity, { eager: true })
-  location!: LocationEntity;
-
-  @Column({ type: 'varchar', length: 50 })
-  workType!: WorkType
+  @Column({ type: 'text' })
+  country!: string;
 
   @Column({ type: 'text' })
-  postedAt!: string;
+  city!: string;
+
+  @Column({ type: 'varchar', length: 50 })
+  workplaceType!: WorkplaceType
+
+  @Column({ type: 'text', unique: true, transformer: {
+    to: (value: Date) => value.toISOString(),
+    from: (value: string) => new Date(value),
+  }})
+  postedAt!: Date;
+
+  @Column({ type: 'text'})
+  platformJobId!: string;
+
+  @Column({ type: 'text', unique: true })
+  url!: string;
+
+  @Column({ type: 'text', nullable: true })
+  companyLogoUrl?: string;
 }

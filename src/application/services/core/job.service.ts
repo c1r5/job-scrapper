@@ -15,7 +15,10 @@ export class JobService implements IEventListener {
   ) { this.start_listening() }
 
   start_listening(): void {
-    this.eventBus.subscribe('job.create.request', async payload => { })
+    this.eventBus.subscribe('job.create.request', async payload => {
+      const savedJob = await this.repository.insert(payload);
+      this.eventBus.publish('job.created', savedJob);
+    })
   }
 
   stop_listening(): void {

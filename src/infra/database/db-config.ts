@@ -1,7 +1,6 @@
 import { DataSource } from "typeorm";
 import { JobEntity } from "./entities/job.entity";
 import { LinkEntity } from "./entities/link.entity";
-import { LocationEntity } from "./entities/location.entity";
 import { SessionEntity } from "./entities/session.entity";
 
 export const appDataSource = new DataSource({
@@ -11,7 +10,6 @@ export const appDataSource = new DataSource({
   entities: [
     JobEntity,
     LinkEntity,
-    LocationEntity,
     SessionEntity
   ]
 });

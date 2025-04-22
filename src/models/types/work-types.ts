@@ -1,2 +1,2 @@
 
-export type WorkType = 'on-site' | 'hybrid' | 'remote';
+export type WorkplaceType = 'on-site' | 'hybrid' | 'remote';

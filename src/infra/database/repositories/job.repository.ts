@@ -32,7 +32,8 @@ export class JobRepository implements IAppRepository<JobEntity> {
 
   insert(item: Partial<JobEntity>): Promise<JobEntity> {
     if (!item) throw new Error('Item is required');
-    return this.repository.save(item);
+    const newItem = this.repository.create(item);
+    return this.repository.save(newItem);
   }
 
   update(id: string | number, item: Partial<JobEntity>): Promise<JobEntity> {

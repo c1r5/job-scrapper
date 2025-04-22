@@ -1,6 +1,7 @@
 import { JobEntity } from "infra/database/entities/job.entity";
 import { LinkEntity } from "infra/database/entities/link.entity";
 import { ScrappingOptions } from "../scrapping-options";
+import { JobDTO } from "models/dtos/job-dto";
 
 
 export interface EventPayloads {
@@ -19,6 +20,6 @@ export interface EventPayloads {
   'job.updated': Partial<JobEntity>;
   'job.deleted': { jobId: string };
 
-  'job.create.request': Partial<JobEntity>;
+  'job.create.request': JobDTO;
   'job.create.error': any;
 }

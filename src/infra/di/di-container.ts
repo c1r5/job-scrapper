@@ -7,7 +7,7 @@ import { IAppRepository } from "models/interfaces/app-repository.interface";
 import { SessionEntity } from "../database/entities/session.entity";
 import { LinkEntity } from "../database/entities/link.entity";
 import { JobEntity } from "../database/entities/job.entity";
-import { SessionRepository } from "infra/repositories/session.repository";
+import { SessionRepository } from "infra/database/repositories/session.repository";
 import { JobRepository } from "../database/repositories/job.repository";
 import { IAppQueue } from "models/interfaces/app-queue.interface";
 import { FileQueue } from "application/queue/file.queue";
@@ -15,7 +15,7 @@ import path from "path";
 import { IEventListener } from "models/interfaces/event-listener.interface";
 import { localEventBus } from "application/events";
 import { LinkService, JobService, SerpAPIService, QuickinService } from "application/services";
-import { LinkRepository } from "infra/repositories";
+import { LinkRepository } from "infra/database/repositories";
 
 export class DiContainer {
   public DI_CONTAINER?: Container;
