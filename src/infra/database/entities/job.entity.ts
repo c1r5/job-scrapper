@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, Index, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { WorkplaceType } from "models/types/work-types";
 
 @Entity('jobs')
@@ -7,6 +7,7 @@ export class JobEntity extends BaseEntity {
   id!: string
 
   @Column({ type: 'text' })
+  @Index()
   role!: string;
 
   @Column({ type: 'text'})

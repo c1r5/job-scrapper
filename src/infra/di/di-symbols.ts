@@ -1,17 +1,24 @@
+import {
+  JobService,
+  LinkService,
+  QuickinService,
+  SerpAPIService
+} from "application/services"
+
+import { LinkRepository, JobRepository, SessionRepository } from "infra/database/repositories";
+import { DataSource } from "typeorm";
 
 export const DI_SYMBOLS = {
-  AppDataSource: Symbol.for('AppDataSource'),
+  AppDataSource: Symbol.for(DataSource.name),
 
-  LinkRepository: Symbol.for('LinkRepository'),
-  JobRepository: Symbol.for('JobRepository'),
-  SessionRepository: Symbol.for('SessionRepository'),
-  LocationRepository: Symbol.for('LocationRepository'),
-  LinkService: Symbol.for('LinkService'),
+  LinkRepository: Symbol.for(LinkRepository.name),
+  JobRepository: Symbol.for(JobRepository.name),
+  SessionRepository: Symbol.for(SessionRepository.name),
+  LinkService: Symbol.for(LinkService.name),
 
-  SerpAPIService: Symbol.for('SerpAPIService'),
-  JobService: Symbol.for('JobService'),
-  QuickinService: Symbol.for('QuickinService'),
+  SerpAPIService: Symbol.for(SerpAPIService.name),
+  JobService: Symbol.for(JobService.name),
+  QuickinService: Symbol.for(QuickinService.name),
 
-  AppQueue: Symbol.for('AppQueue'),
-  EventBus: Symbol.for('EventBus'),
+  EventBus: Symbol.for('IEventBus'),
 }

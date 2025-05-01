@@ -1,4 +1,11 @@
-export * from './search-scrapping'
-export * from './quickin/quickin.service'
-export * from './core/job.service'
-export * from './http/quickin.api'
+import { JobService } from "./job.service";
+import { LinkService } from "./link.service";
+import { QuickinService } from "./quickin.service";
+import { SerpAPIService } from "./serpapi.service";
+
+export {
+  JobService,
+  LinkService,
+  QuickinService,
+  SerpAPIService
+}

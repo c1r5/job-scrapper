@@ -1,39 +1,24 @@
 import { inject, injectable } from "inversify";
 import { DI_SYMBOLS } from "infra/di/di-symbols";
 import { IEventBus } from "models/interfaces/eventbus.interface";
-import { IAppQueue } from "models/interfaces/app-queue.interface";
-import { Readable } from "stream";
 import { AxiosError } from "axios";
 import { IEventListener } from "models/interfaces/event-listener.interface";
 import { sleepms } from "application/helpers";
-import { extract_slugs } from "./helpers/extract_slug";
-import { get_company, get_jobs } from "application/services/http/quickin.api";
-import { JobDTO } from "models/dtos/job-dto";
+import { extract_slugs } from "../helpers/extract_slug";
+import { get_company, get_jobs } from "application/services/quickin.api";
 
 
 @injectable()
 export class QuickinService implements IEventListener {
-  private readonly queueName = 'quickin.queue';
-
   constructor(
-    @inject(DI_SYMBOLS.AppQueue) private queue: IAppQueue<string>,
     @inject(DI_SYMBOLS.EventBus) private eventbus: IEventBus
   ) {
     this.start_listening();
-    this.queue.start(this.queueName, async (queue, slug) => {
-      if (queue !== this.queueName) return;
-
-      console.log('[+] Processing slug', slug);
-      await this.scrapeAllPages(slug);
-      console.log('[+] Finished processing slug', slug);
-    });
-
   }
   start_listening(): void {
     this.eventbus.subscribe('link.created', async payload => {
       const slug = extract_slugs(payload.link)
-      if (!slug) return
-      await this.queue.enqueue(this.queueName, slug)
+      // implementar scrapper por link
     });
   }
   stop_listening(): void {

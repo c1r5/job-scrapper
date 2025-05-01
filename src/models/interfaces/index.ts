@@ -1,4 +1,9 @@
-export * from './app-queue.interface';
-export * from './app-repository.interface';
-export * from './eventbus.interface';
-export * from './job-adapter.interface';
+import { IAppRepository } from "./app-repository.interface";
+import { IEventListener } from "./event-listener.interface";
+import { IEventBus } from "./eventbus.interface";
+
+export {
+  IEventBus,
+  IAppRepository,
+  IEventListener,
+}

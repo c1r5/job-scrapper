@@ -9,13 +9,11 @@ import { LinkEntity } from "../database/entities/link.entity";
 import { JobEntity } from "../database/entities/job.entity";
 import { SessionRepository } from "infra/database/repositories/session.repository";
 import { JobRepository } from "../database/repositories/job.repository";
-import { IAppQueue } from "models/interfaces/app-queue.interface";
-import { FileQueue } from "application/queue/file.queue";
-import path from "path";
 import { IEventListener } from "models/interfaces/event-listener.interface";
 import { localEventBus } from "application/events";
 import { LinkService, JobService, SerpAPIService, QuickinService } from "application/services";
 import { LinkRepository } from "infra/database/repositories";
+import { NotificationService } from "application/services/core/notify.service";
 
 export class DiContainer {
   public DI_CONTAINER?: Container;
@@ -33,16 +31,12 @@ export class DiContainer {
     this.DI_CONTAINER.bind<IAppRepository<JobEntity>>(DI_SYMBOLS.JobRepository).to(JobRepository)
     this.DI_CONTAINER.bind<IAppRepository<SessionEntity>>(DI_SYMBOLS.SessionRepository).to(SessionRepository)
 
-    this.DI_CONTAINER.bind<LinkService>(DI_SYMBOLS.LinkService).to(LinkService)
-
+    this.DI_CONTAINER.bind<IEventListener>(DI_SYMBOLS.LinkService).to(LinkService)
     this.DI_CONTAINER.bind<IEventListener>(DI_SYMBOLS.JobService).to(JobService)
     this.DI_CONTAINER.bind<IEventListener>(DI_SYMBOLS.SerpAPIService).to(SerpAPIService)
     this.DI_CONTAINER.bind<IEventListener>(DI_SYMBOLS.QuickinService).to(QuickinService)
+    this.DI_CONTAINER.bind<IEventListener>(DI_SYMBOLS.NotificationService).to(NotificationService)
 
-    this.DI_CONTAINER
-      .bind<IAppQueue>(DI_SYMBOLS.AppQueue)
-      .toDynamicValue(() => new FileQueue(path.resolve("queue.json")))
-      .inSingletonScope();
   }
 
   get<T>(identifier: symbol): T {
